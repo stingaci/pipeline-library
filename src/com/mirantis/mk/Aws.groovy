@@ -39,7 +39,7 @@ def createStack(vevn_path, env_vars, template_file, parameters = []) {
         for (int i=0; i<parameters.length; i++) {
            cmd = "${cmd} ${parameters[i]}"
         }
-    {
+    }
 
     withEnv(envVars) {
         def out = python.runVirtualenvCommand(venv_path, cmd)
@@ -65,8 +65,9 @@ def getStackStatus(venv_path, env_vars) {
     return {}
 }
 
-def waitForStatus(venv_path, env_vars, stack_name, status, timeout = 600) {
+def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
     def python = new com.mirantis.mk.Python()
+    def common = new com.mirantis.mk.Common()
 
     timeout = timeout * 1000
     Date date = new Date()
@@ -77,16 +78,18 @@ def waitForStatus(venv_path, env_vars, stack_name, status, timeout = 600) {
     def out
 
     while (true) {
-        // get stack status
+        // get stack state
         withEnv(envVars) {
             out = python.runVirtualenvCommand(venv_path, cmd)
-            if (out['Stacks'][0]['StackName']
+            if (out['Stacks'][0]['StackStatus'] == state) {
+                common.successMsg("Stack ${stack_name} in in state ${state}")
+                break;
+            }
         }
 
         // check for timeout
         if (time_start + timeout < date.getTime()) {
-            throw new Exception("Timeout while waiting for status ${status} for stack ${stack}")
+            throw new Exception("Timeout while waiting for state ${state} for stack ${stack}")
         }
     }
-
 }
