@@ -106,7 +106,7 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sl
 def getOutputs(venv_path, env_vars, stack_name, key = '') {
     def aws = new com.mirantis.mk.Aws()
     def common = new com.mirantis.mk.Common()
-    def outputs = {}
+    def output = {}
 
     def stack_info = aws.describeStack(venv_path, env_vars, stack_name)
     common.prettyPrint(stack_info)
