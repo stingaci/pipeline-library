@@ -69,13 +69,12 @@ def describeStack(venv_path, env_vars, stack_name) {
         print(stack_info)
         return stack_info
     }
-
-    return {}
 }
 
 def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
-    def python = new com.mirantis.mk.Python()
+    def aws = new com.mirantis.mk.Aws()
     def common = new com.mirantis.mk.Common()
+    def python = new com.mirantis.mk.Python()
 
     timeout = timeout * 1000
     Date date = new Date()
@@ -84,7 +83,7 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
     while (true) {
         // get stack state
         withEnv(env_vars) {
-            stack_info = describeStack(venv_path, env_vars, stack_name)
+            stack_info = aws.describeStack(venv_path, env_vars, stack_name)
             print(stack_info)
             print(stack_info.getClass())
             print(stack_info['StackStatus'])
