@@ -63,9 +63,10 @@ def describeStack(venv_path, env_vars, stack_name) {
     withEnv(env_vars) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
-        def stack_info = out['Stacks'][0]
-        print(stack_info)
-        return stack_info
+        print(out)
+        // def stack_info = out['Stacks'][0]
+        // print(stack_info)
+        // return stack_info
     }
 
     return {}
