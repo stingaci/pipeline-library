@@ -63,10 +63,12 @@ def describeStack(venv_path, env_vars, stack_name) {
     withEnv(env_vars) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
+        def out_json = readJSON text: out
         print(out)
-        // def stack_info = out['Stacks'][0]
-        // print(stack_info)
-        // return stack_info
+        print(out_json)
+        def stack_info = out['Stacks'][0]
+        print(stack_info)
+        return stack_info
     }
 
     return {}
@@ -82,7 +84,7 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
 
     while (true) {
         // get stack state
-        withEnv(envVars) {
+        withEnv(env_vars) {
             stack_info = describeStack(venv_path, env_vars, stack_name)
             print(stack_info)
             if (stack_info['StackStatus'] == state) {
