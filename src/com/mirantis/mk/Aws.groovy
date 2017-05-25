@@ -49,7 +49,7 @@ def createStack(vevn_path, env_vars, template_file, parameters = []) {
         }
     }
 
-    withEnv(envVars) {
+    withEnv(env_vars) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
     }
