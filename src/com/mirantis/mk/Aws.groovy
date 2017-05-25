@@ -41,10 +41,10 @@ def createStack(vevn_path, env_vars, template_file, parameters = []) {
 
     def cmd = "aws cloudformation create-stack --stack-name ${stack_name} --template-body file://${template_file}"
 
-    if (parameters != null && parameters.length > 0) {
+    if (parameters != null && parameters.size() > 0) {
         cmd = "${cmd} --parameters"
 
-        for (int i=0; i<parameters.length; i++) {
+        for (int i=0; i<parameters.size(); i++) {
            cmd = "${cmd} ${parameters[i]}"
         }
     }
