@@ -88,7 +88,8 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sl
 
             if (stack_info['StackStatus'] == state) {
                 common.successMsg("Stack ${stack_name} in in state ${state}")
-                break;
+                common.prettyPrint(stack_info)
+                break
             }
         }
 
