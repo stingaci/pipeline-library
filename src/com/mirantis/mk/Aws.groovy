@@ -96,6 +96,8 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sl
         // check for timeout
         if (time_start + timeout < date.getTime()) {
             throw new Exception("Timeout while waiting for state ${state} for stack ${stack}")
+        } else {
+            common.infoMsg('Waiting for stack to start. Elapsed ' + (date.getTime() - time_start) + ' seconds')
         }
 
         // wait for next loop
