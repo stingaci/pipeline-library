@@ -35,7 +35,7 @@ def getEnvVars(credentials_id, region = 'us-west-2') {
 
 
 
-def createStack(vevn_path, env_vars, template_file, parameters = []) {
+def createStack(venv_path, env_vars, template_file, parameters = []) {
     def python = new com.mirantis.mk.Python()
 
 
