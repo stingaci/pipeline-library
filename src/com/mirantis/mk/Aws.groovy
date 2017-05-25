@@ -80,9 +80,9 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sl
     Date date = new Date()
     def time_start = date.getTime() // in seconds
 
-    while (true) {
-        // get stack state
-        withEnv(env_vars) {
+    withEnv(env_vars) {
+        while (true) {
+            // get stack state
             stack_info = aws.describeStack(venv_path, env_vars, stack_name)
             common.infoMsg('Stack status is ' + stack_info['StackStatus'])
 
@@ -91,16 +91,29 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sl
                 common.prettyPrint(stack_info)
                 break
             }
-        }
 
-        // check for timeout
-        if (time_start + timeout < date.getTime()) {
-            throw new Exception("Timeout while waiting for state ${state} for stack ${stack}")
-        } else {
-            common.infoMsg('Waiting for stack to start. Elapsed ' + (date.getTime() - time_start) + ' seconds')
-        }
+            // check for timeout
+            if (time_start + timeout < date.getTime()) {
+                throw new Exception("Timeout while waiting for state ${state} for stack ${stack}")
+            } else {
+                common.infoMsg('Waiting for stack to start. Elapsed ' + (date.getTime() - time_start) + ' seconds')
+            }
 
-        // wait for next loop
-        sleep(loop_sleep)
+            // wait for next loop
+            sleep(loop_sleep)
+        }
+    }
+}
+
+def getOutputs(venv_path, env_vars, stack_name, key = '') {
+    def aws = new com.mirantis.mk.Aws()
+    def common = new com.mirantis.mk.Common()
+    def outputs = {}
+
+    def stack_info = aws.describeStack(venv_path, env_vars, stack_name)
+    common.prettyPrint(stack_info)
+
+    for (int i=0; i<stack_info['Outputs'].size(); i++) {
+
     }
 }
