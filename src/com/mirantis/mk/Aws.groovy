@@ -65,10 +65,7 @@ def describeStack(venv_path, env_vars, stack_name) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
         def out_json = common.parseJSON(out)
-        print(out)
-        print(out_json)
-        def stack_info = out['Stacks'][0]
-        print(stack_info)
+        def stack_info = out_json['Stacks'][0]
         return stack_info
     }
 
