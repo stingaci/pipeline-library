@@ -58,15 +58,9 @@ def createStack(venv_path, env_vars, template_file, stack_name, parameters = [])
 def describeStack(venv_path, env_vars, stack_name) {
     def python = new com.mirantis.mk.Python()
 
-    def envVars = [
-        "AWS_ACCESS_KEY_ID=${access_key_id}",
-        "AWS_SECRET_ACCESS_KEY=${secret_access_key}",
-        "AWS_DEFAULT_REGION=${region}"
-    ]
-
     cmd = "aws cloudformation describe-stacks --stack-name ${stack_name}"
 
-    withEnv(envVars) {
+    withEnv(env_vars) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
         def stack_info = out['Stacks'][0]
