@@ -57,13 +57,14 @@ def createStack(venv_path, env_vars, template_file, stack_name, parameters = [])
 
 def describeStack(venv_path, env_vars, stack_name) {
     def python = new com.mirantis.mk.Python()
+    def common = new com.mirantis.mk.Common()
 
     cmd = "aws cloudformation describe-stacks --stack-name ${stack_name}"
 
     withEnv(env_vars) {
         print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
-        def out_json = readJSON text: out
+        def out_json = common.parseJSON(out)
         print(out)
         print(out_json)
         def stack_info = out['Stacks'][0]
