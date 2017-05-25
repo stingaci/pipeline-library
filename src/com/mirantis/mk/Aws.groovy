@@ -8,7 +8,7 @@ package com.mirantis.mk
  *
  */
 
-def setupVirtualEnv(venv_path) {
+def setupVirtualEnv(venv_path = '.aws_venv') {
     def python = new com.mirantis.mk.Python()
 
     requirements = [
@@ -42,11 +42,12 @@ def createStack(vevn_path, env_vars, template_file, parameters = []) {
     }
 
     withEnv(envVars) {
+        print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
     }
 }
 
-def getStackStatus(venv_path, env_vars) {
+def describeStack(venv_path, env_vars, stack_name) {
     def python = new com.mirantis.mk.Python()
 
     def envVars = [
@@ -58,8 +59,11 @@ def getStackStatus(venv_path, env_vars) {
     cmd = "aws cloudformation describe-stacks --stack-name ${stack_name}"
 
     withEnv(envVars) {
+        print(cmd)
         def out = python.runVirtualenvCommand(venv_path, cmd)
-        return out
+        def stack_info = out['Stacks'][0]
+        print(stack_info)
+        return stack_info
     }
 
     return {}
@@ -73,15 +77,12 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
     Date date = new Date()
     def time_start = date.getTime() // in seconds
 
-    def cmd = "aws cloudformation describe-stacks --stack-name \"${stack_name}\""
-
-    def out
-
     while (true) {
         // get stack state
         withEnv(envVars) {
-            out = python.runVirtualenvCommand(venv_path, cmd)
-            if (out['Stacks'][0]['StackStatus'] == state) {
+            stack_info = describeStack(venv_path, env_vars, stack_name)
+            print(stack_info)
+            if (stack_info['StackStatus'] == state) {
                 common.successMsg("Stack ${stack_name} in in state ${state}")
                 break;
             }
