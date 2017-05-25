@@ -112,6 +112,12 @@ def getOutputs(venv_path, env_vars, stack_name, key = '') {
     common.prettyPrint(stack_info)
 
     for (int i=0; i<stack_info['Outputs'].size(); i++) {
+        output[stack_info['Outputs'][i]['OutputKey'] = output[stack_info['Outputs'][i]['OutputValue']
+    }
 
+    if (key != null && key != '') {
+        return output[key]
+    } else {
+        return output
     }
 }
