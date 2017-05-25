@@ -86,6 +86,7 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
         withEnv(env_vars) {
             stack_info = describeStack(venv_path, env_vars, stack_name)
             print(stack_info)
+            print(stack_info['StackStatus'])
 
             if (stack_info['StackStatus'] == state) {
                 common.successMsg("Stack ${stack_name} in in state ${state}")
