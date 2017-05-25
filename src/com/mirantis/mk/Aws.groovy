@@ -8,7 +8,7 @@ package com.mirantis.mk
  *
  */
 
-def setupVirtualEnv(venv_path = '.aws_venv') {
+def setupVirtualEnv(venv_path = 'aws_venv') {
     def python = new com.mirantis.mk.Python()
 
     requirements = [
