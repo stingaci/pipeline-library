@@ -66,6 +66,7 @@ def describeStack(venv_path, env_vars, stack_name) {
         def out = python.runVirtualenvCommand(venv_path, cmd)
         def out_json = common.parseJSON(out)
         def stack_info = out_json['Stacks'][0]
+        print(stack_info)
         return stack_info
     }
 
@@ -85,6 +86,7 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600) {
         withEnv(env_vars) {
             stack_info = describeStack(venv_path, env_vars, stack_name)
             print(stack_info)
+
             if (stack_info['StackStatus'] == state) {
                 common.successMsg("Stack ${stack_name} in in state ${state}")
                 break;
