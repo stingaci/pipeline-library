@@ -71,7 +71,7 @@ def describeStack(venv_path, env_vars, stack_name) {
     }
 }
 
-def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, sleep = 30) {
+def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, loop_sleep = 30) {
     def aws = new com.mirantis.mk.Aws()
     def common = new com.mirantis.mk.Common()
     def python = new com.mirantis.mk.Python()
@@ -98,6 +98,6 @@ def waitForStatus(venv_path, env_vars, stack_name, state, timeout = 600, sleep =
         }
 
         // wait for next loop
-        sleep(sleep)
+        sleep(loop_sleep)
     }
 }
