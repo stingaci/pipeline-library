@@ -18,13 +18,21 @@ def setupVirtualEnv(venv_path = 'aws_venv') {
     python.setupVirtualenv(venv_path, 'python2', requirements)
 }
 
+def getEnvVars(credentials_id, region = 'us-west-2') {
+    def common = new com.mirantis.mk.Python()
+
+    def creds = common.getCredentials(credentials_id)
+
+    return [
+        "AWS_ACCESS_KEY_ID=${creds.username}",
+        "AWS_SECRET_ACCESS_KEY=${creds.password}",
+        "AWS_DEFAULT_REGION=${region}"
+    ]
+
+}
+
 // ParameterKey=KeyName,ParameterValue=tkukral_yubi
 
-//    env_vars = [
-//        "AWS_ACCESS_KEY_ID=${access_key_id}",
-//        "AWS_SECRET_ACCESS_KEY=${secret_access_key}",
-//        "AWS_DEFAULT_REGION=${region}"
-//    ]
 
 
 def createStack(vevn_path, env_vars, template_file, parameters = []) {
