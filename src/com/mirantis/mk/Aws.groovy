@@ -19,7 +19,7 @@ def setupVirtualEnv(venv_path = 'aws_venv') {
 }
 
 def getEnvVars(credentials_id, region = 'us-west-2') {
-    def common = new com.mirantis.mk.Python()
+    def common = new com.mirantis.mk.Common()
 
     def creds = common.getCredentials(credentials_id)
 
