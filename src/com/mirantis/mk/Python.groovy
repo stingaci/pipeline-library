@@ -39,7 +39,7 @@ def setupVirtualenv(path, python = 'python2', reqs=[], reqs_path=null, clean=fal
         writeFile file: "${path}/requirements.txt", text: args
         reqs_path = "${path}/requirements.txt"
     }
-    runVirtualenvCommand(path, "pip install -r ${reqs_path}")
+    print(runVirtualenvCommand(path, "pip install -r ${reqs_path}"))
 }
 
 /**
