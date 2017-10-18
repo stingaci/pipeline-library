@@ -25,7 +25,7 @@ def setupVirtualenv(path, python = 'python2', reqs=[], reqs_path=null, clean=fal
     }
 
     common.infoMsg("[Python ${path}] Setup ${python} environment")
-    sh(returnStdout: true, script: virtualenv_cmd)
+    print(sh(returnStdout: true, script: virtualenv_cmd))
     try {
         runVirtualenvCommand(path, "pip install -U setuptools pip")
     } catch(Exception e) {
