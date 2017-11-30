@@ -82,8 +82,8 @@ export OS_PROJECT_DOMAIN_ID=${project_domain}
 export OS_USER_DOMAIN_NAME=${user_domain}
 export OS_API_IDENTITY_VERSION=${api_ver}
 export OS_CACERT=${cacert}
-alias openstack=\"openstack --insecure\"
-alias heat=\"heat --insecure\"
+alias openstack='openstack --insecure'
+alias heat='heat --insecure'
 set -x
 """
     writeFile file: rcFile, text: rc
