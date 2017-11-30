@@ -82,8 +82,6 @@ export OS_PROJECT_DOMAIN_ID=${project_domain}
 export OS_USER_DOMAIN_NAME=${user_domain}
 export OS_API_IDENTITY_VERSION=${api_ver}
 export OS_CACERT=${cacert}
-alias openstack='openstack --insecure'
-alias heat='heat --insecure'
 set -x
 """
     writeFile file: rcFile, text: rc
@@ -121,7 +119,7 @@ def runOpenstackCommand(cmd, venv, path = null) {
  */
 def getKeystoneToken(client, path = null) {
     def python = new com.mirantis.mk.Python()
-    cmd = "openstack token issue"
+    cmd = "openstack --insecure token issue"
     outputTable = runOpenstackCommand(cmd, client, path)
     output = python.parseTextTable(outputTable, 'item', 'prettytable', path)
     return output
@@ -178,7 +176,7 @@ def createHeatStack(client, name, template, params = [], environment = null, pat
         envFile = "${env.WORKSPACE}/template/${name}.env"
         createHeatEnv(envFile, params)
     }
-    cmd = "heat stack-create -f ${templateFile} -e ${envFile} ${name}"
+    cmd = "heat --insecure stack-create -f ${templateFile} -e ${envFile} ${name}"
     dir("${env.WORKSPACE}/template/template") {
         outputTable = runOpenstackCommand(cmd, client, path)
     }
@@ -213,7 +211,7 @@ def createHeatStack(client, name, template, params = [], environment = null, pat
  * @param path         Optional path to the custom virtualenv
  */
 def getStacksForNameContains(client, filter, path = null){
-    cmd = 'heat stack-list | awk \'NR>3 {print $4}\' | sed \'$ d\' | grep ' + filter + '|| true'
+    cmd = 'heat --insecure stack-list | awk \'NR>3 {print $4}\' | sed \'$ d\' | grep ' + filter + '|| true'
     return runOpenstackCommand(cmd, client, path).trim().tokenize("\n")
 }
 
@@ -226,7 +224,7 @@ def getStacksForNameContains(client, filter, path = null){
  * @param path         Optional path to the custom virtualenv
  */
  def getStacksWithStatus(client, status, path = null) {
-    cmd = 'heat stack-list -f stack_status='+status+' | awk \'NR>3 {print $4}\' | sed \'$ d\''
+    cmd = 'heat --insecure stack-list -f stack_status='+status+' | awk \'NR>3 {print $4}\' | sed \'$ d\''
     return runOpenstackCommand(cmd, client, path).trim().tokenize("\n")
  }
 
@@ -238,7 +236,7 @@ def getStacksForNameContains(client, filter, path = null){
  * @param path         Optional path to the custom virtualenv
  */
 def getHeatStackStatus(client, name, path = null) {
-    cmd = 'heat stack-list | awk -v stack='+name+' \'{if ($4==stack) print $6}\''
+    cmd = 'heat --insecure stack-list | awk -v stack='+name+' \'{if ($4==stack) print $6}\''
     return runOpenstackCommand(cmd, client, path)
 }
 
@@ -251,7 +249,7 @@ def getHeatStackStatus(client, name, path = null) {
  */
 def getHeatStackInfo(env, name, path = null) {
     def python = new com.mirantis.mk.Python()
-    cmd = "heat stack-show ${name}"
+    cmd = "heat insecure stack-show ${name}"
     outputTable = runOpenstackCommand(cmd, env, path)
     output = python.parseTextTable(outputTable, 'item', 'prettytable', path)
     return output
@@ -266,7 +264,7 @@ def getHeatStackInfo(env, name, path = null) {
  * @param path         Optional path to the custom virtualenv
  */
 def getHeatStackOutputParam(env, name, outputParam, path = null) {
-    cmd = "heat output-show ${name} ${outputParam}"
+    cmd = "heat --insecure output-show ${name} ${outputParam}"
     output = runOpenstackCommand(cmd, env, path)
     echo("${cmd}: ${output}")
     return "${output}".substring(1, output.length()-1)
@@ -281,7 +279,7 @@ def getHeatStackOutputParam(env, name, outputParam, path = null) {
  */
 def getHeatStackResources(env, name, path = null) {
     def python = new com.mirantis.mk.Python()
-    cmd = "heat resource-list ${name}"
+    cmd = "heat --insecure resource-list ${name}"
     outputTable = runOpenstackCommand(cmd, env, path)
     output = python.parseTextTable(outputTable, 'list', 'prettytable', path)
     return output
@@ -296,7 +294,7 @@ def getHeatStackResources(env, name, path = null) {
  */
 def getHeatStackResourceInfo(env, name, resource, path = null) {
     def python = new com.mirantis.mk.Python()
-    cmd = "heat resource-show ${name} ${resource}"
+    cmd = "heat --insecure resource-show ${name} ${resource}"
     outputTable = runOpenstackCommand(cmd, env, path)
     output = python.parseTextTable(outputTable, 'item', 'prettytable', path)
     return output
@@ -311,7 +309,7 @@ def getHeatStackResourceInfo(env, name, resource, path = null) {
  */
 def updateHeatStack(env, name, path = null) {
     def python = new com.mirantis.mk.Python()
-    cmd = "heat stack-update ${name}"
+    cmd = "heat --insecure stack-update ${name}"
     outputTable = runOpenstackCommand(cmd, env, path)
     output = python.parseTextTable(outputTable, 'item', 'prettytable', path)
     return output
@@ -325,7 +323,7 @@ def updateHeatStack(env, name, path = null) {
  * @param path         Optional path to the custom virtualenv
  */
 def deleteHeatStack(env, name, path = null) {
-    cmd = "heat stack-delete ${name}"
+    cmd = "heat --insecure stack-delete ${name}"
     outputTable = runOpenstackCommand(cmd, env, path)
 }
 
